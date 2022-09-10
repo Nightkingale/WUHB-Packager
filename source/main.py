@@ -155,7 +155,7 @@ pick_content_path = tkinter.Button(main_window, text="Select Path to /content Di
 pick_content_path.grid(column=0, row=3)
 pick_content_path.config(height=1, width=35)
 # Program title panel.
-title_label = tkinter.Label(main_window, text="WUHB Packager", width=40)
+title_label = tkinter.Label(main_window, text="WUHB Packager (v1.0.1)", width=40)
 title_label.grid(column=1, row=2)
 # RPX file selection panel.
 rpx_label = tkinter.Label(main_window, text="Path to RPX file")
