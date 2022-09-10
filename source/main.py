@@ -241,8 +241,8 @@ else:
 if not os.path.exists(command):
     # wuhbtool might not be installed or configured correctly.
     messagebox.showerror("WUHB Packager", "You must have wuhbtool "
-    + "installed properly in order to package an application. PLease check "
-    + " the WUHB Packager repository page for more information.")
+    + "installed properly in order to package an application. Please check "
+    + "the WUHB Packager repository page for more information.")
     os._exit(0)
 
 main_window.mainloop()
