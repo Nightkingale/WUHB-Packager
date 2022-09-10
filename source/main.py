@@ -93,6 +93,8 @@ def select_drc_splash_file():
 
 # Where all the core functions happen, packaging to a WUHB.
 def package_wuhb_file():
+    global command
+
     rpx = rpx_path.get()
     content = content_path.get()
     name = long_name_path.get()
@@ -123,23 +125,6 @@ def package_wuhb_file():
                 + "image files will be used during packaging. Is this okay?")
             if not answer:
                 return
-
-        if os.name == "nt":
-            # Confirmed that the user is running Windows.
-            command = "C:\\devkitPro\\tools\\bin\wuhbtool.exe"
-        elif os.name == "posix":
-            # Confirmed that the user is running Linux.
-            command = "/opt/devkitpro/tools/bin/wuhbtool"
-        else:
-            # The user is using an operating system that probably isn't supported.
-            messagebox.showerror("WUHB Packager", "Homebrew cannot be packaged on "
-            + "this system. Please try again on a Linux or Windows operating system.")
-
-        if not os.path.exists(command):
-            # wuhbtool might not be installed or configured correctly.
-            return messagebox.showerror("WUHB Packager", "You must have wuhbtool "
-            + "installed properly in order to package an application. PLease check "
-            + " the WUHB Packager repository page for more information.")
         
         command += f" \"{rpx}\" \"{wuhb}\""
 
@@ -240,5 +225,24 @@ credit_label.grid(column=1, row=14)
 
 # Make sure packaging button is disabled on start-up.
 check_package_status()
+
+if os.name == "nt":
+    # Confirmed that the user is running Windows.
+    command = "C:\\devkitPro\\tools\\bin\wuhbtool.exe"
+elif os.name == "posix":
+    # Confirmed that the user is running Linux.
+    command = "/opt/devkitpro/tools/bin/wuhbtool"
+else:
+    # The user is using an operating system that probably isn't supported.
+    messagebox.showerror("WUHB Packager", "Homebrew cannot be packaged on "
+    + "this system. Please try again on a Linux or Windows operating system.")
+    os._exit(0)
+
+if not os.path.exists(command):
+    # wuhbtool might not be installed or configured correctly.
+    messagebox.showerror("WUHB Packager", "You must have wuhbtool "
+    + "installed properly in order to package an application. PLease check "
+    + " the WUHB Packager repository page for more information.")
+    os._exit(0)
 
 main_window.mainloop()
