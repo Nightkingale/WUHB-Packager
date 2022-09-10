@@ -226,23 +226,33 @@ credit_label.grid(column=1, row=14)
 # Make sure packaging button is disabled on start-up.
 check_package_status()
 
-if os.name == "nt":
-    # Confirmed that the user is running Windows.
-    command = "C:\\devkitPro\\tools\\bin\wuhbtool.exe"
-elif os.name == "posix":
-    # Confirmed that the user is running Linux.
-    command = "/opt/devkitpro/tools/bin/wuhbtool"
-else:
+if os.name not in ["nt", "posix"]:
     # The user is using an operating system that probably isn't supported.
     messagebox.showerror("WUHB Packager", "Homebrew cannot be packaged on "
-    + "this system. Please try again on a Linux or Windows operating system.")
+        + "this system. Please try again on a Linux or Windows operating system.")
     os._exit(0)
 
-if not os.path.exists(command):
+try:
+    if os.name == "nt":
+        import winreg
+        # Confirmed that the user is running Windows.
+        registry_key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
+            r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\devkitProUpdater",
+            access=winreg.KEY_READ | winreg.KEY_WOW64_32KEY)
+        install_location = winreg.QueryValueEx(registry_key, "InstallLocation")
+        command = install_location[0] + r"\tools\bin\wuhbtool.exe"
+    else:
+        # Confirmed that the user is running Linux.
+        command = os.environ["DEVKITPRO"] + "/tools/bin/wuhbtool"
+
+    if not os.path.exists(command):
+        raise FileNotFoundError()
+
+except (FileNotFoundError, KeyError) as error:
     # wuhbtool might not be installed or configured correctly.
     messagebox.showerror("WUHB Packager", "You must have wuhbtool "
-    + "installed properly in order to package an application. Please check "
-    + "the WUHB Packager repository page for more information.")
+        + "installed properly in order to package an application. Please check "
+        + "the WUHB Packager repository page for more information.")
     os._exit(0)
 
 main_window.mainloop()
