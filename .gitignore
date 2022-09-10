@@ -1,0 +1,7 @@
+# Optimization
+__pycache__/
+
+# PyInstaller
+build/
+dist/
+main.spec
