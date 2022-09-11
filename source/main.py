@@ -104,10 +104,6 @@ def package_wuhb_file():
     tv_image = tv_splash_path.get()
     drc_image = drc_splash_path.get()
 
-    optional_arguments = [
-        content, name, short_name, author, icon, tv_image, drc_image
-    ]
-
     wuhb = filedialog.asksaveasfilename(
         filetypes=[("WUHB Files", ".wuhb")], defaultextension=".wuhb")
 
@@ -128,9 +124,27 @@ def package_wuhb_file():
         
         command += f" \"{rpx}\" \"{wuhb}\""
 
-        for argument in optional_arguments:
-            if argument:
-                command += f' --{argument}="{argument}"'
+        if content:
+            # Check for optional /content folder.
+            command += f' --content="{content}"'
+        if name:
+            # Check for optional application name.
+            command += f' --name "{name}"'
+        if short_name:
+            # Check for optional application short name.
+            command += f' --short-name "{short_name}"'
+        if author:
+            # Check for optional application author.
+            command += f' --author "{author}"'
+        if icon:
+            # Check for optional icon image.
+            command += f' --icon="{icon}"'
+        if tv_image:
+            # Check for optional television splash image.
+            command += f' --tv-image="{tv_image}"'
+        if drc_image:
+            # Check for optional Wii U GamePad splash image.
+            command += f' --drc-image="{drc_image}"'
 
         # Disable the package button, run the command, and inform when finished.
         package_wuhb_button.config(text="Processing Package", state="disabled")
