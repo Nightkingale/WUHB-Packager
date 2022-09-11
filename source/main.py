@@ -93,7 +93,7 @@ def select_drc_splash_file():
 
 # Where all the core functions happen, packaging to a WUHB.
 def package_wuhb_file():
-    global command
+    global wuhbtool_file
 
     rpx = rpx_path.get()
     content = content_path.get()
@@ -122,20 +122,20 @@ def package_wuhb_file():
             if not answer:
                 return
         
-        command += f" \"{rpx}\" \"{wuhb}\""
+        command = f"{wuhbtool_file} \"{rpx}\" \"{wuhb}\""
 
         if content:
             # Check for optional /content folder.
             command += f' --content="{content}"'
         if name:
             # Check for optional application name.
-            command += f' --name "{name}"'
+            command += f' --name="{name}"'
         if short_name:
             # Check for optional application short name.
-            command += f' --short-name "{short_name}"'
+            command += f' --short-name="{short_name}"'
         if author:
             # Check for optional application author.
-            command += f' --author "{author}"'
+            command += f' --author="{author}"'
         if icon:
             # Check for optional icon image.
             command += f' --icon="{icon}"'
@@ -254,12 +254,12 @@ try:
             r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\devkitProUpdater",
             access=winreg.KEY_READ | winreg.KEY_WOW64_32KEY)
         install_location = winreg.QueryValueEx(registry_key, "InstallLocation")
-        command = install_location[0] + r"\tools\bin\wuhbtool.exe"
+        wuhbtool_file = install_location[0] + r"\tools\bin\wuhbtool.exe"
     else:
         # Confirmed that the user is running Linux.
-        command = os.environ["DEVKITPRO"] + "/tools/bin/wuhbtool"
+        wuhbtool_file = os.environ["DEVKITPRO"] + "/tools/bin/wuhbtool"
 
-    if not os.path.exists(command):
+    if not os.path.exists(wuhbtool_file):
         raise FileNotFoundError()
 
 except (FileNotFoundError, KeyError) as error:
