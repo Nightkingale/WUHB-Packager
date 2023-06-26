@@ -234,7 +234,7 @@ package_wuhb_button.config(height=2, width=35)
 button_separator = ttk.Separator(main_window, orient="horizontal")
 button_separator.grid(column=1, row=13, sticky="ew", pady=10)
 # Credits line to show who made the application.
-credit_label = tkinter.Label(main_window, text="Created by NoahAbc12345", width=40)
+credit_label = tkinter.Label(main_window, text="Created by Nightkingale", width=40)
 credit_label.grid(column=1, row=14)
 
 # Make sure packaging button is disabled on start-up.
