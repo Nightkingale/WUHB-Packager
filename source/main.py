@@ -1,4 +1,5 @@
 import os
+import subprocess
 import tkinter
 
 from PIL import Image
@@ -149,10 +150,18 @@ def package_wuhb_file():
         # Disable the package button, run the command, and inform when finished.
         package_wuhb_button.config(text="Processing Package", state="disabled")
 
-        os.system(command)
-        messagebox.showinfo("WUHB Packager", "The application was packaged successfully! "
-        + "If something seems incorrect, please try again or report the issue to the "
-        + "WUHB Packager repository page.")
+        try:
+            completed_process = subprocess.run(command, capture_output=True, shell=True)
+            if completed_process.returncode == 0:
+                messagebox.showinfo("WUHB Packager", "The application was packaged successfully! No errors "
+                    + "were encountered during the packaging process.")
+            else:
+                messagebox.showerror("WUHB Packager", "An error occurred during packaging. Please try again or "
+                + f"report the issue to the WUHB Packager repository page.\n\n{completed_process.stderr.decode()}")
+        except Exception as error:
+            messagebox.showerror("WUHB Packager", "An error occurred during packaging. Please try again or "
+                + f"report the issue to the WUHB Packager repository page.\n\n{str(error)}")
+
         package_wuhb_button.config(text="Package WUHB File", state="normal")
 
 # Create the Tkinter window and assets.
@@ -242,8 +251,8 @@ check_package_status()
 
 if os.name not in ["nt", "posix"]:
     # The user is using an operating system that probably isn't supported.
-    messagebox.showerror("WUHB Packager", "Homebrew cannot be packaged on "
-        + "this system. Please try again on a Linux or Windows operating system.")
+    messagebox.showerror("WUHB Packager", "Homebrew cannot be packaged with this tool "
+        + "on this system. Please try again on a Linux or Windows operating system.")
     os._exit(0)
 
 try:
