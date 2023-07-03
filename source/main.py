@@ -164,6 +164,21 @@ def package_wuhb_file():
 
         package_wuhb_button.config(text="Package WUHB File", state="normal")
 
+# Reset all fields back to their default state.
+def reset_form():
+    # List of entry fields to reset.
+    text_fields = [long_name_path, short_name_path, author_path]
+    read_fields = [rpx_path, content_path, icon_path, tv_splash_path, drc_splash_path]
+    # Reset fields back to blank.
+    for field in text_fields:
+        field.delete(0, "end")
+    for field in read_fields:
+        field.config(state="normal")
+        field.delete(0, "end")
+        field.config(state="readonly")
+    # Disable the package button.
+    package_wuhb_button.config(state="disabled")
+
 # Create the Tkinter window and assets.
 main_window = Tk()
 main_window.title("WUHB Packager")
@@ -178,7 +193,7 @@ pick_content_path = tkinter.Button(main_window, text="Select Path to /content Di
 pick_content_path.grid(column=0, row=3)
 pick_content_path.config(height=1, width=35)
 # Program title panel.
-title_label = tkinter.Label(main_window, text="WUHB Packager (v1.0.3)", width=40)
+title_label = tkinter.Label(main_window, text="WUHB Packager (v1.1.0)", width=40)
 title_label.grid(column=1, row=2)
 # RPX file selection panel.
 rpx_label = tkinter.Label(main_window, text="Path to RPX file")
@@ -241,10 +256,15 @@ package_wuhb_button.grid(column=1, row=12)
 package_wuhb_button.config(height=2, width=35)
 # Line seperator to put the credits line away from the rest.
 button_separator = ttk.Separator(main_window, orient="horizontal")
-button_separator.grid(column=1, row=13, sticky="ew", pady=10)
+button_separator.grid(column=1, row=13, sticky="ew", pady=(10, 5))
+# Button to reset the entire form, start at default.
+reset_button = tkinter.Button(main_window, text="Reset Form",
+    border=0, command=reset_form, fg="red")
+reset_button.grid(column=1, row=14)
+reset_button.config(height=1, width=15)
 # Credits line to show who made the application.
 credit_label = tkinter.Label(main_window, text="Created by Nightkingale", width=40)
-credit_label.grid(column=1, row=14)
+credit_label.grid(column=1, row=15, pady=(5, 0), sticky="n")
 
 # Make sure packaging button is disabled on start-up.
 check_package_status()
