@@ -122,6 +122,9 @@ def package_wuhb_file():
                 + "image files will be used during packaging. Is this okay?")
             if not answer:
                 return
+            
+        # Disable the package button, run the command, and inform when finished.
+        package_wuhb_button.config(text="Processing Package", state="disabled")
         
         command = f"{wuhbtool_file} \"{rpx}\" \"{wuhb}\""
 
@@ -147,11 +150,8 @@ def package_wuhb_file():
             # Check for optional Wii U GamePad splash image.
             command += f' --drc-image="{drc_image}"'
 
-        # Disable the package button, run the command, and inform when finished.
-        package_wuhb_button.config(text="Processing Package", state="disabled")
-
         try:
-            completed_process = subprocess.run(command, capture_output=True, shell=True)
+            completed_process = subprocess.run(command, capture_output=True)
             if completed_process.returncode == 0:
                 messagebox.showinfo("WUHB Packager", "The application was packaged successfully! No errors "
                     + "were encountered during the packaging process.")
