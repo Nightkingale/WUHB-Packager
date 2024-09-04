@@ -293,9 +293,14 @@ try:
 
 except (FileNotFoundError, KeyError) as error:
     # wuhbtool might not be installed or configured correctly.
-    messagebox.showerror("WUHB Packager", "You must have wuhbtool "
-        + "installed properly in order to package an application. Please check "
-        + "the WUHB Packager repository page for more information.")
-    os._exit(0)
+    messagebox.showinfo("WUHB Packager", "The wuhbtool was not correctly installed "
+        + "on this System. Please select your wuhbtool executable in the following window!")
+    if os.name == "nt":
+        file_ext = [
+            ["EXE Files", ".exe"]
+        ]
+        wuhbtool_file = filedialog.askopenfilename(filetypes=file_ext)
+    else:
+        wuhbtool_file = filedialog.askopenfilename()
 
 main_window.mainloop()
