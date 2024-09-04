@@ -294,7 +294,7 @@ try:
 except (FileNotFoundError, KeyError) as error:
     # wuhbtool might not be installed or configured correctly.
     messagebox.showinfo("WUHB Packager", "The wuhbtool was not correctly installed "
-        + "on this System. Please select your wuhbtool executable in the following window!")
+        + "on this System. Please select your wuhbtool executable in the following window!\nPackaging will fail if you do not choose the wuhbtool executable!")
     if os.name == "nt":
         file_ext = [
             ["EXE Files", ".exe"]
