@@ -280,7 +280,7 @@ try:
         import winreg
         # Confirmed that the user is running Windows.
         registry_key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
-            r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\devkitProUpdater",
+            r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\devkitProUpdaters",
             access=winreg.KEY_READ | winreg.KEY_WOW64_32KEY)
         install_location = winreg.QueryValueEx(registry_key, "InstallLocation")
         wuhbtool_file = install_location[0] + r"\tools\bin\wuhbtool.exe"
@@ -293,9 +293,22 @@ try:
 
 except (FileNotFoundError, KeyError) as error:
     # wuhbtool might not be installed or configured correctly.
-    messagebox.showerror("WUHB Packager", "You must have wuhbtool "
-        + "installed properly in order to package an application. Please check "
-        + "the WUHB Packager repository page for more information.")
-    os._exit(0)
+    messagebox.showinfo("WUHB Packager", "The wuhbtool was not correctly installed "
+        + "on this System. Please select your wuhbtool executable in the following window!\nPackaging will fail if you do not choose the wuhbtool executable!")
+    if os.name == "nt":
+        file_ext = [
+            ["EXE Files", ".exe"]
+        ]
+        wuhbtool_file = filedialog.askopenfilename(filetypes=file_ext)
+    else:
+        wuhbtool_file = filedialog.askopenfilename()
+
+    if wuhbtool_file == "":
+        messagebox.showerror("WUHB Packager","User cancled File Picking.\nProgram will now terminate.")
+        os._exit(0)
+    wuhbtool_fn = os.path.splitext(os.path.basename(wuhbtool_file))[0]
+    if "wuhbtool" not in wuhbtool_fn.lower():
+        messagebox.showerror("WUHB Packager","Could not verify that the provided tool is wuhbtool.\nProgram will now terminate.")
+        os._exit(0)
 
 main_window.mainloop()
